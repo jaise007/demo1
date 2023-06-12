@@ -1,21 +1,21 @@
+name: Deploy to EC2
+
 on:
-  workflow_dispatch: {}
   push:
     branches:
       - main
-    paths:
-      - "*/index.html" 
- 
+
 jobs:
   deploy:
-    name: Deploy to EC2 on main branch push
     runs-on: ubuntu-latest
- 
+
     steps:
-      - name: ssh and do stuff
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: Deploy to EC2
         run: |
-          sudo apt install sshpass -y
-          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no -o ConnectTimeout=60 ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "
           git clone git@github.com:jaise007/demo1.git
           sudo mv demo1/index.html /var/www/html
           sudo systemctl restart httpd
