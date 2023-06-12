@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: ssh and do stuff
         run: |
-          sudo apt install sshpass -y
+          sudo yum install sshpass -y
           sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "
           git clone git@github.com:jaise007/demo1.git
           sudo mv demo1/index.html /var/www/html
